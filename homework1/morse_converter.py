@@ -75,7 +75,7 @@ figure_7 = MorseLetter("7", [dash, dsh_dt_ps, dash, dsh_dt_ps, dot, dsh_dt_ps, d
 figure_8 = MorseLetter("8", [dash, dsh_dt_ps, dash, dsh_dt_ps, dash, dsh_dt_ps, dot, dsh_dt_ps, dot])
 figure_9 = MorseLetter("9", [dash, dsh_dt_ps, dash, dsh_dt_ps, dash, dsh_dt_ps, dash, dsh_dt_ps, dot])
 
-symb_gap = MorseLetter(" ", [dot, dot, dot, dot, dot, dot, dot])
+symb_gap = MorseLetter(" ", [dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps])
 
 morse_alphabet = [letter_a, letter_b, letter_c, letter_d, letter_e, letter_f, letter_g, letter_h, letter_i, letter_j,
                   letter_k, letter_l, letter_m, letter_n, letter_o, letter_p, letter_q, letter_r, letter_s, letter_t,
@@ -97,13 +97,16 @@ for idx_msg in range(len(message)):
             out_seq.append(morse_alphabet[idx_abc])
             break
 
+    # Every sign in alphabet is checked and no appropriate symbol has found
     if (idx_abc + 1) == len(morse_alphabet):
         print("Invalid text")
         is_inv_msg = 1
         break
-#    else:
-        #verify whether letters are separated by gap or not. add a pause between letters if there is no gap
-        
+
+    # Verify whether letters are separated by gap or not
+    #else:
+        #if (idx_msg + 1) != " ":
+            
 
 if is_inv_msg == 0:
     for k in range(len(out_seq)):
