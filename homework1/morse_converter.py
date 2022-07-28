@@ -92,28 +92,27 @@ out_seq = [] # Contains sequence of functions for indication
 # Transform message letters to lower case to avoid "Invalid text" error
 message = input("Enter a message and press ENTER: ").lower()
 
-is_inv_msg = 0
+is_inv_symb = 0
 
 # Verify that message contains allowable symbols only and making
 for idx_msg in range(len(message)):
     idx_abc = 0
+    is_inv_symb = 1
     for idx_abc in range(len(morse_alphabet)):
         if morse_alphabet[idx_abc].sign == message[idx_msg]:
             out_seq.append(morse_alphabet[idx_abc])
+            is_inv_symb = 0
             break
 
     # Every sign in alphabet is checked and no appropriate symbol has found
-    if idx_abc >= len(morse_alphabet):
-        is_inv_msg = 1
-        break
-    else:
+    if is_inv_symb == 0:
         # Verify current symbol is not last in sequence to prevent out from list bounds
         if idx_msg + 1 < len(message):
             # Current and next symbols are letters - insert gap pause between letters
             if (message[idx_msg] != " " and (message[idx_msg + 1]) != " "):
                 out_seq.append(symb_lttr_gap)
 
-if is_inv_msg == 0:
+if is_inv_symb == 0:
     if len(message) != 0:
         for k in range(len(out_seq)):
             out_seq[k].indicate()
