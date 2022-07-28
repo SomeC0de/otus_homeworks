@@ -5,9 +5,9 @@ import time
 
 time_unit_sec = 1
 
-pin_led = 18
+pin_led = 11
 
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BOARD)
 GPIO.setup(pin_led, GPIO.OUT)
 GPIO.output(pin_led, GPIO.LOW)
 
@@ -18,8 +18,12 @@ class MorseLetter:
         self.symb_set = list(symbols_seq)
 
     def indicate(self):
+        print (self.sign)
         for cnt in range(len(self.symb_set)):
             self.symb_set[cnt]()
+
+    def get_sign(self):
+        return self.sign
 
 
 def dash():
@@ -75,16 +79,18 @@ figure_7 = MorseLetter("7", [dash, dsh_dt_ps, dash, dsh_dt_ps, dot, dsh_dt_ps, d
 figure_8 = MorseLetter("8", [dash, dsh_dt_ps, dash, dsh_dt_ps, dash, dsh_dt_ps, dot, dsh_dt_ps, dot])
 figure_9 = MorseLetter("9", [dash, dsh_dt_ps, dash, dsh_dt_ps, dash, dsh_dt_ps, dash, dsh_dt_ps, dot])
 
-symb_gap = MorseLetter(" ", [dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps])
+symb_word_gap = MorseLetter(" ", [dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps])
+symb_lttr_gap = MorseLetter("*", [dsh_dt_ps])
 
 morse_alphabet = [letter_a, letter_b, letter_c, letter_d, letter_e, letter_f, letter_g, letter_h, letter_i, letter_j,
                   letter_k, letter_l, letter_m, letter_n, letter_o, letter_p, letter_q, letter_r, letter_s, letter_t,
                   letter_u, letter_v, letter_w, letter_x, letter_y, letter_z,
-                  symb_gap,
-                  figure_0, figure_1, figure_2, figure_3, figure_4, figure_5, figure_6, figure_7, figure_8, figure_9]
+                  figure_0, figure_1, figure_2, figure_3, figure_4, figure_5, figure_6, figure_7, figure_8, figure_9,
+                  symb_word_gap]
 
 out_seq = [] # Contains sequence of functions for indication
 
+# Transform message letters to lower case to avoid "Invalid text" error
 message = input("Enter a message and press ENTER: ").lower()
 
 is_inv_msg = 0
@@ -98,18 +104,21 @@ for idx_msg in range(len(message)):
             break
 
     # Every sign in alphabet is checked and no appropriate symbol has found
-    if (idx_abc + 1) == len(morse_alphabet):
-        print("Invalid text")
+    if idx_abc >= len(morse_alphabet):
         is_inv_msg = 1
         break
-
-    # Verify whether letters are separated by gap or not
-    #else:
-        #if (idx_msg + 1) != " ":
-            
+    else:
+        # Verify current symbol is not last in sequence to prevent out from list bounds
+        if idx_msg + 1 < len(message):
+            # Current and next symbols are letters - insert gap pause between letters
+            if (message[idx_msg] != " " and (message[idx_msg + 1]) != " "):
+                out_seq.append(symb_lttr_gap)
 
 if is_inv_msg == 0:
-    for k in range(len(out_seq)):
-        out_seq[k].indicate()
+    if len(message) != 0:
+        for k in range(len(out_seq)):
+            out_seq[k].indicate()
+else:
+    print("Invalid text")
 
 GPIO.cleanup()
