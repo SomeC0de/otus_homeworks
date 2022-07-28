@@ -18,7 +18,6 @@ class MorseLetter:
         self.symb_set = list(symbols_seq)
 
     def indicate(self):
-        print (self.sign)
         for cnt in range(len(self.symb_set)):
             self.symb_set[cnt]()
 
@@ -80,7 +79,7 @@ figure_8 = MorseLetter("8", [dash, dsh_dt_ps, dash, dsh_dt_ps, dash, dsh_dt_ps, 
 figure_9 = MorseLetter("9", [dash, dsh_dt_ps, dash, dsh_dt_ps, dash, dsh_dt_ps, dash, dsh_dt_ps, dot])
 
 symb_word_gap = MorseLetter(" ", [dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps, dsh_dt_ps])
-symb_lttr_gap = MorseLetter("*", [dsh_dt_ps])
+symb_lttr_gap = MorseLetter("", [dsh_dt_ps])
 
 morse_alphabet = [letter_a, letter_b, letter_c, letter_d, letter_e, letter_f, letter_g, letter_h, letter_i, letter_j,
                   letter_k, letter_l, letter_m, letter_n, letter_o, letter_p, letter_q, letter_r, letter_s, letter_t,
