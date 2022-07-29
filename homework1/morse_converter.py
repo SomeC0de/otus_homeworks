@@ -11,6 +11,8 @@ GPIO.setmode(GPIO.BOARD)
 GPIO.setup(pin_led, GPIO.OUT)
 GPIO.output(pin_led, GPIO.LOW)
 
+# Class describes single letter printing presentation and it equivalent in Morse alphabet
+# as sequence of 'dot', 'dash' and 'dsh_dt_ps' functions. These functions are described below.
 class MorseLetter:
 
     def __init__(self, letter, symbols_seq):
@@ -24,22 +26,25 @@ class MorseLetter:
     def get_sign(self):
         return self.sign
 
-
+# Method implements indication of 'dash' symbol. GPIO pin sets high on 3 seconds
 def dash():
     GPIO.output(pin_led, GPIO.HIGH)
     time.sleep(3 * time_unit_sec)
     GPIO.output(pin_led, GPIO.LOW)
 
+# Method implements indication of 'dash' symbol. GPIO pin sets high on 1 second
 def dot():
     GPIO.output(pin_led, GPIO.HIGH)
     time.sleep(time_unit_sec)
     GPIO.output(pin_led, GPIO.LOW)
 
+# Method implements indication of 'gap' between letters and between 'dash' and 'dot' symbols. GPIO pin sets low on 1 second
 def dsh_dt_ps():
     GPIO.output(pin_led, GPIO.LOW)
     time.sleep(time_unit_sec)
     GPIO.output(pin_led, GPIO.LOW)
 
+# Generate alphabetbased on 'MorseLetter' class
 letter_a = MorseLetter("a", [dot, dsh_dt_ps, dash])
 letter_b = MorseLetter("b", [dash, dsh_dt_ps, dot, dsh_dt_ps, dot, dsh_dt_ps, dot])
 letter_c = MorseLetter("c", [dash, dsh_dt_ps, dot, dsh_dt_ps, dash, dsh_dt_ps, dot])
@@ -87,14 +92,17 @@ morse_alphabet = [letter_a, letter_b, letter_c, letter_d, letter_e, letter_f, le
                   figure_0, figure_1, figure_2, figure_3, figure_4, figure_5, figure_6, figure_7, figure_8, figure_9,
                   symb_word_gap]
 
-out_seq = [] # Contains sequence of functions for indication
+# Contains input message which converted to indication functions settings
+out_seq = []
 
-# Transform message letters to lower case to avoid "Invalid text" error
+# Transform message letters to lower case to avoid "Invalid text" error. All letters in alphabet are by default in lower case, so upper case
+# can be recognized as unknown symbol
 message = input("Enter a message and press ENTER: ").lower()
 
+# Flag to indicate that unknown symbol is found
 is_inv_symb = 0
 
-# Verify that message contains allowable symbols only and making
+# Verify that message contains allowable symbols only and simultaneously add indication functions for known symbols to 'out_seq' list
 for idx_msg in range(len(message)):
     idx_abc = 0
     is_inv_symb = 1
@@ -104,14 +112,15 @@ for idx_msg in range(len(message)):
             is_inv_symb = 0
             break
 
-    # Every sign in alphabet is checked and no appropriate symbol has found
+    # Every sign in alphabet is checked and only known symbols have found
     if is_inv_symb == 0:
-        # Verify current symbol is not last in sequence to prevent out from list bounds
+        # Verify that current and next symbols are in range of 'message' list 
         if idx_msg + 1 < len(message):
             # Current and next symbols are letters - insert gap pause between letters
             if (message[idx_msg] != " " and (message[idx_msg + 1]) != " "):
                 out_seq.append(symb_lttr_gap)
 
+# Indication block
 if is_inv_symb == 0:
     if len(message) != 0:
         for k in range(len(out_seq)):
