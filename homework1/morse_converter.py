@@ -46,7 +46,7 @@ def dsh_dt_ps():
     time.sleep(time_unit_sec)
     GPIO.output(pin_led, GPIO.LOW)
 
-# Generate alphabetbased on 'MorseLetter' class
+# Generate alphabet based on 'MorseLetter' class
 letter_a = MorseLetter("a", [dot, dsh_dt_ps, dash])
 letter_b = MorseLetter("b", [dash, dsh_dt_ps, dot, dsh_dt_ps, dot, dsh_dt_ps, dot])
 letter_c = MorseLetter("c", [dash, dsh_dt_ps, dot, dsh_dt_ps, dash, dsh_dt_ps, dot])
@@ -94,7 +94,7 @@ morse_alphabet = [letter_a, letter_b, letter_c, letter_d, letter_e, letter_f, le
                   figure_0, figure_1, figure_2, figure_3, figure_4, figure_5, figure_6, figure_7, figure_8, figure_9,
                   symb_word_gap]
 
-# Contains input message which converted to indication functions settings
+# Contains input message converted to indication functions settings
 out_seq = []
 
 # Transform message letters to lower case to avoid "Invalid text" error. All letters in alphabet are by default in lower case, so upper case
