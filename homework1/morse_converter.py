@@ -5,6 +5,8 @@ import time
 
 time_unit_sec = 1
 
+# Number of pin means it placement on GPIO header, not a number Broadcom GPIO pin
+# (i.e. not GPIO11). It used with GPIO.setmode(GPIO.BOARD) option, not GPIO.setmode(GPIO.BCM)
 pin_led = 11
 
 GPIO.setmode(GPIO.BOARD)
