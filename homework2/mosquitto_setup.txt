@@ -1,0 +1,41 @@
+Настройка Mosquitto: подключение с использованием пароля.
+
+1. Создать файл  c:\Program Files\mosquitto\password.txt. Пары в формате username:password
+  занести в файл password.txt по одной паре на строку.
+
+  ESP8266:
+    username: esp8266
+    password: strong_password
+
+  Raspberry Pi:
+    username: RPi_3
+    password: weak_password
+
+  mosquitto_sub:
+    username: mosquitto_sub
+    password: qwerty
+
+  mosquitto_pub:
+    username: mosquitto_pub
+    password: 123456
+  
+  Далее с помощью команды
+  mosquitto_passwd -U password.txt
+
+  генерируются зашифрованные пароли.
+
+  Примечание: при добавлении новой пары username:password для уже добавленных пар пароль нужно сбрасывать до исходного, а не оставлять зашифрованным.
+
+2. В файле конфигурации mosquitto (mosquitto.conf) добавить следующее:
+  listener 1883
+  allow_anonymous false
+  password_file c:\Program Files\mosquitto\password.txt
+ 
+3. Перезапустить mosquitto,  указав что при запуске нужно использовать mosquitto.conf:
+  mosquitto -c mosquitto.conf -v
+
+4. mosquitto_sub запускать с помощью следующей команды:
+  mosquitto_sub -h localhost -p 1883 -t "topic_name" -u "mosquitto_sub" -P "qwerty"
+
+5. mosquitto_pub запускать с помощью следующей команды:
+  mosquitto_pub -h localhost -p 1883 -t "topic_name" -m "payload_text" -u "mosquitto_pub" -P "123456"
